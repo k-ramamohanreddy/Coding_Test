@@ -9,15 +9,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.ram.codingtest.R
 import com.ram.codingtest.listeners.NewsItemClickListener
-import com.ram.codingtest.loadImage
+import com.ram.codingtest.utilis.loadImage
 import com.ram.codingtest.model.News
 
 class NewsListAdapter(listener: NewsItemClickListener) : RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
 
-    private var newList: MutableList<News> = ArrayList()
+    private var newList: ArrayList<News> = arrayListOf()
     private val listener = listener
 
-    fun setNews(news: MutableList<News>) {
+    fun setNews(news: List<News>) {
         newList.addAll(news)
         notifyDataSetChanged()
     }

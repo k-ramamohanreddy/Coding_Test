@@ -2,10 +2,8 @@ package com.ram.codingtest.ui.main
 
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.ram.codingtest.databinding.FragmentMainBinding
 import com.ram.codingtest.listeners.NewsItemClickListener
-import com.ram.codingtest.setVisibility
-import com.ram.codingtest.setVisibilityGone
+import com.ram.codingtest.utilis.setVisibility
+import com.ram.codingtest.utilis.setVisibilityGone
 import com.ram.codingtest.ui.main.adapters.NewsListAdapter
+import com.ram.codingtest.utilis.Result
 
 class MainFragment : Fragment(), NewsItemClickListener {
 
@@ -42,23 +41,25 @@ class MainFragment : Fragment(), NewsItemClickListener {
         newsListAdapter = NewsListAdapter(this)
         binding.newsList.adapter = newsListAdapter
         registerObservers()
-        binding.progress.setVisibility()
         viewModel.getNews()
         return root
     }
 
     private fun registerObservers() {
-        viewModel.newsSuccessLiveData.observe(viewLifecycleOwner) { newsResponse ->
-            newsResponse?.let {
-                newsListAdapter.setNews(newsResponse.news)
+        viewModel.getNewsLiveData().observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Success -> {
+                    newsListAdapter.setNews(result.data)
+                    binding.progress.setVisibilityGone()
+                }
+                is Result.InProgress -> {
+                    binding.progress.setVisibility()
+                }
+                is Result.Error -> {
+                    binding.progress.setVisibilityGone()
+                    Toast.makeText(activity, result.exception.message, Toast.LENGTH_LONG).show()
+                }
             }
-            binding.progress.setVisibilityGone()
-        }
-        viewModel.newsFailureLiveData.observe(viewLifecycleOwner) { isFailed ->
-            isFailed?.let {
-                Toast.makeText(activity?.applicationContext, "Oops! something went wrong", Toast.LENGTH_LONG).show()
-            }
-            binding.progress.setVisibilityGone()
         }
     }
 

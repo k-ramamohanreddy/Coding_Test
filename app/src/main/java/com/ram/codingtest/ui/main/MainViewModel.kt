@@ -1,18 +1,41 @@
 package com.ram.codingtest.ui.main
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ram.codingtest.model.News
 import com.ram.codingtest.repository.NewsRepository
 import kotlinx.coroutines.launch
+import com.ram.codingtest.utilis.Result
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val mainRepository = NewsRepository(application)
+class MainViewModel() : ViewModel() {
+    private val newsRepository = NewsRepository()
 
-    val newsSuccessLiveData = mainRepository.newsSuccessLiveData
-    val newsFailureLiveData = mainRepository.newsFailureLiveData
+    val newsLiveData = MutableLiveData<Result<List<News>>>()
 
     fun getNews() {
-        viewModelScope.launch { mainRepository.getNews() }
+        try {
+            viewModelScope.launch {
+                val response = newsRepository.getNews()
+                response.let {
+                when (it) {
+                    is Result.Success -> {
+                        val newsList = it.extractData
+                        newsList?.let { list ->
+                            newsLiveData.postValue(Result.Success(list))
+                        }
+                    }
+                    else -> newsLiveData.postValue(it)
+                }
+            }
+            }
+        } catch (exception : Exception) {
+            newsLiveData.postValue(Result.Error(exception))
+        }
+    }
+
+    fun getNewsLiveData(): LiveData<Result<List<News>>> {
+        return newsLiveData
     }
 }

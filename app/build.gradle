@@ -44,9 +44,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -65,13 +62,20 @@ dependencies {
 
     //Mockk
     testImplementation "io.mockk:mockk:1.12.4"
-    implementation 'androidx.arch.core:core-testing:2.1.0'
 
     //Mockito
-    testImplementation "org.mockito:mockito-core:4.0.0"
-    testImplementation "org.mockito:mockito-inline:4.0.0"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+//    testImplementation "org.mockito:mockito-inline:4.0.0"
+//    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
-    //For runBlockingTest, CoroutineDispatcher etc.
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.2'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.mockito:mockito-core:3.4.6"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1") {
+        // https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-debug#debug-agent-and-android
+        exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+    }
 }

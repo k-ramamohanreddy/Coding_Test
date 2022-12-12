@@ -1,43 +1,45 @@
 package com.ram.codingtest.repository
 
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import com.ram.codingtest.api.APIClient
-import com.ram.codingtest.api.APIInterface
-import com.ram.codingtest.model.NewsResponse
-import com.ram.codingtest.ui.main.MainViewModel
-import io.mockk.coVerify
-import io.mockk.verify
+import com.ram.codingtest.api.RequestErrorCodes.SOMETHING_WRONG
+import com.ram.codingtest.utilis.Result
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
-import retrofit2.Response
 
 class NewsRepositoryTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
 
-    private val application = Mockito.mock(Application::class.java)
     private lateinit var newsRepository: NewsRepository
     private lateinit var apiClient: APIClient
-    private lateinit var apiInterface: APIInterface
 
     @Before
     fun setUp() {
-        newsRepository = NewsRepository(application)
+        newsRepository = NewsRepository()
         apiClient = APIClient
-        apiInterface = apiClient.apiService
     }
 
     @Test
-    fun getNews() = runBlocking{
-        newsRepository.getNews()
-        assertNotNull(newsRepository.newsSuccessLiveData)
+    fun `given response ok when fetching results then return a list with elements`() {
+        runBlocking {
+            val apiResponse = newsRepository.getNews()
+            assertNotNull(apiResponse)
+        }
+    }
+
+    @Test
+    fun `given response failure when fetching results then return exception`() {
+        runBlocking {
+            val apiResponse = newsRepository.getNews("un_known_error_api_key")
+            assertNotNull(apiResponse)
+            val expectedValue = Result.Error(Exception(SOMETHING_WRONG))
+            assertEquals(expectedValue.exception.message, (apiResponse as Result.Error).exception.message)
+        }
     }
 }
