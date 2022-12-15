@@ -13,10 +13,6 @@ object APIClient {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logger)
-//            .addInterceptor { chain ->
-//                val request: Request = chain.request().newBuilder().addHeader("Authorization", "qKN7_sJYDJ2hs94yjDOiTVLWIeHjTcBc0cNVxe_6EU6Ox06c").build()
-//                chain.proceed(request)
-//            }
             .build()
 
         apiService = Retrofit.Builder()

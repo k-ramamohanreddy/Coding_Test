@@ -17,7 +17,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.Response
 
@@ -45,7 +45,6 @@ class MainViewModelTest {
 
     @Before
     fun setUp() {
-        // do something if required
         viewModel = MainViewModel()
         newsRepository = NewsRepository()
     }
@@ -74,7 +73,6 @@ class MainViewModelTest {
 
     @After
     fun tearDown() {
-        // do something if required
         viewModel.getNewsLiveData().removeObserver(apiNewsObserver)
     }
 

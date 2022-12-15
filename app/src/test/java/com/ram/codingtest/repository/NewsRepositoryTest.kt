@@ -5,7 +5,8 @@ import com.ram.codingtest.api.APIClient
 import com.ram.codingtest.api.RequestErrorCodes.SOMETHING_WRONG
 import com.ram.codingtest.utilis.Result
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertEquals
 
 import org.junit.Before
 import org.junit.Rule
